@@ -6,6 +6,9 @@ import math
 def draw_airport(airport):
     for element in airport.values():
         drawLine(*element)
+    # for taxiway in airport.keys():
+    #     label = makeLabel(taxiway, 30, 200, 200, "red")
+    #     showLabel(label)
 
 
 def request_command(wordbox):
@@ -47,15 +50,17 @@ class DepAircraft:
 
     def evaluate_instructions(self, instruction):
         last_pos = self.last_position(get=True)
-        next_pos = get_next_pos(instruction, last_pos)
-        x, y = self.move_craft(last_pos, next_pos)
+        valid_instruction = True  # TODO: convert "valid_instruction" into a function to validate instruction
+        if valid_instruction:
+            next_pos = get_next_pos(instruction, last_pos)
+            x, y = self.move_craft(last_pos, next_pos)
         deg = self.angle
         self.turn_craft(deg)
         self.last_position(x, y)
 
     def turn_craft(self, deg):
-        diff = self.angle - deg if self.angle > deg else deg - self.angle  # gets the difference between angles
-        transformSprite(self.craft, self.angle + diff, self.scale)
+        diff = abs(self.angle - deg)  # if self.angle > deg else deg - self.angle  # gets the difference between angles
+        transformSprite(self.craft, diff, self.scale)
         self.angle = deg
 
     def move_craft(self, last_pos, next_pos):

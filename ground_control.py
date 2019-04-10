@@ -11,11 +11,11 @@ setBackgroundColour("grey")
 def main():
     draw_airport(airport1)
     wordbox = place_command_box()
-    b747 = DepAircraft("AI117", "B747", "G1")
-    b747.generate_craft()
+    AI123 = DepAircraft("AI123", "B747", "G1")
+    AI123.generate_craft()
     while True:
         instructions = request_command(wordbox)
-        b747.evaluate_instructions(instructions)
+        AI123.evaluate_instructions(instructions)
         draw_airport(airport1)
         tick(30)
 
