@@ -39,6 +39,7 @@ def evaluate_instructions(obj):
         if i in (keywords or taxiways):
             inst.append(i)
     print(inst)
+    # just a comment
 
 
 if __name__ == '__main__':
