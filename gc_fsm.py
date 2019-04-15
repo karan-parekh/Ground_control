@@ -29,6 +29,14 @@ taxiways = ['A', 'M', 'N', 'W', 'X', 'Y', 'Z']
 keywords = ['PB', 'TXW', 'FC', 'TXI', 'VIA', 'HS', 'RNW', 'HP', 'CNT', 'TWR', 'FRQ', 'NORTH', 'SOUTH', 'EAST', 'WEST',
             '09', '27', '123.9']
 
+states_dict = {
+    'PB': 'pushback',
+    'TXI': 'taxi',
+    'HS': 'hold_short',
+    'HP': 'hold_position',
+    'TKF': 'take_off'
+}
+
 
 def evaluate_instructions(obj):
     print(obj.state)
@@ -36,10 +44,13 @@ def evaluate_instructions(obj):
     cmd = cmd.split(' ')
     inst = []
     for i in cmd:
-        if i in (keywords or taxiways):
+        if i in keywords or i in taxiways:
             inst.append(i)
-    print(inst)
-    # just a comment
+    states = []
+    for kw in inst:
+        if isinstance(states_dict[kw], tuple(states_dict.keys())):
+            states.append(kw)
+    print(states)
 
 
 if __name__ == '__main__':
