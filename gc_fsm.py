@@ -15,6 +15,15 @@ class DepAircraft:
         self.callsign = callsign
         self.machine = Machine(model=self, states=DepAircraft.states, transitions=DepAircraft.transitions, initial='dark')
 
+    trans_dict = {
+        'PB': 'pushback',
+        'TXI': 'taxi',
+        'HS': 'hold_short',
+        'HP': 'hold_position',
+        'TKF': 'take_off'
+    }
+
+
 
 def expected_inst(prev_state):
     instructions = {
@@ -29,13 +38,6 @@ taxiways = ['A', 'M', 'N', 'W', 'X', 'Y', 'Z']
 keywords = ['PB', 'TXW', 'FC', 'TXI', 'VIA', 'HS', 'RNW', 'HP', 'CNT', 'TWR', 'FRQ', 'NORTH', 'SOUTH', 'EAST', 'WEST',
             '09', '27', '123.9']
 
-states_dict = {
-    'PB': 'pushback',
-    'TXI': 'taxi',
-    'HS': 'hold_short',
-    'HP': 'hold_position',
-    'TKF': 'take_off'
-}
 
 
 def evaluate_instructions(obj):
@@ -46,11 +48,13 @@ def evaluate_instructions(obj):
     for i in cmd:
         if i in keywords or i in taxiways:
             inst.append(i)
-    states = []
-    for kw in inst:
-        if isinstance(states_dict[kw], tuple(states_dict.keys())):
-            states.append(kw)
-    print(states)
+    transition = obj.trans_dict[inst[0]]
+    taxiway = inst[1]
+    print(inst)
+    obj.trigger(transition)
+    print(obj.state)
+    print(taxiway)
+    print(inst.index(taxiway))
 
 
 if __name__ == '__main__':
