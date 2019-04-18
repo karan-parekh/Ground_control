@@ -1,4 +1,5 @@
 from transitions import Machine
+from transitions import State
 import enum
 
 
@@ -15,9 +16,15 @@ globals().update(States.__members__)
 
 
 class DepAircraft:
-    states = [States.dark, States.pushback, States.taxi, States.hold_position, States.hold_short, States.take_off]
+    # dark = 'dark'
+    # pushback = 'pushback'
+    # states = [State(dark),
+    #           State(pushback)]
+
+    states = [States.dark.value, States.pushback.value, States.taxi.value, States.hold_position.value,
+              States.hold_short.value, States.take_off.value]
     transitions = [
-        ['pushback', States.dark, States.pushback],
+        ['pushback', States.dark.value, States.pushback.value],
         ['taxi', 'pushback', 'taxi'],
         ['hold_short', 'taxi', 'hold_short'],
         ['take_off', 'hold_short', 'take_off'],
@@ -37,18 +44,10 @@ class DepAircraft:
     }
 
 
-def expected_inst(prev_state):
-    instructions = {
-        'dark': 'pb',
-        'pushback': 'taxi',
-        'taxi': 'hs'
-    }
-    return instructions[prev_state]
-
-
 taxiways = ['A', 'M', 'N', 'W', 'X', 'Y', 'Z']
 keywords = ['PB', 'TXW', 'FCN', 'TXI', 'VIA', 'HS', 'RNW', 'HP', 'CNT', 'TWR', 'FRQ', 'NORTH', 'SOUTH', 'EAST', 'WEST',
             'NEG', 'AFFIRM', '09', '27', '123.9']
+
 
 def evaluate_instructions(obj):
     print(obj.state)
