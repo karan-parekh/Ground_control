@@ -24,7 +24,6 @@ class DepAircraft:
     }
 
 
-
 def expected_inst(prev_state):
     instructions = {
         'dark': 'pb',
@@ -35,9 +34,8 @@ def expected_inst(prev_state):
 
 
 taxiways = ['A', 'M', 'N', 'W', 'X', 'Y', 'Z']
-keywords = ['PB', 'TXW', 'FC', 'TXI', 'VIA', 'HS', 'RNW', 'HP', 'CNT', 'TWR', 'FRQ', 'NORTH', 'SOUTH', 'EAST', 'WEST',
-            '09', '27', '123.9']
-
+keywords = ['PB', 'TXW', 'FCN', 'TXI', 'VIA', 'HS', 'RNW', 'HP', 'CNT', 'TWR', 'FRQ', 'NORTH', 'SOUTH', 'EAST', 'WEST',
+            'NEG', 'AFFIRM', '09', '27', '123.9']
 
 
 def evaluate_instructions(obj):
