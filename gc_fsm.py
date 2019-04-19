@@ -3,15 +3,16 @@ from transitions import State
 
 
 class DepAircraft:
-    def readback(self):
+    @staticmethod
+    def readback():
         print("Reading back")
 
     dark = State('dark')
-    pushback = State('pushback', on_enter=[readback])
-    taxi = State('taxi', on_enter=[readback])
-    hold_position = State('hold_position', on_enter=[readback])
-    hold_short = State('hold_short', on_enter=[readback])
-    take_off = State('take_off', on_enter=[readback])
+    pushback = State('pushback', on_enter=['readback'])
+    taxi = State('taxi', on_enter=['readback'])
+    hold_position = State('hold_position', on_enter=['readback'])
+    hold_short = State('hold_short', on_enter=['readback'])
+    take_off = State('take_off', on_enter=['readback'])
 
     states = [dark, pushback, taxi, hold_short, hold_position, take_off]
 
@@ -27,14 +28,6 @@ class DepAircraft:
         self.callsign = callsign
         self.machine = Machine(model=self, states=DepAircraft.states, transitions=DepAircraft.transitions, initial=DepAircraft.dark)
 
-    trans_dict = {
-        'PB': 'pushback',
-        'TXI': taxi,
-        'HS': hold_short,
-        'HP': hold_position,
-        'TKF': take_off
-    }
-
     taxiways = ['A', 'M', 'N', 'W', 'X', 'Y', 'Z']
     keywords = ['PB', 'TXW', 'FCN', 'TXI', 'VIA', 'HS', 'RNW', 'HP', 'CNT', 'TWR', 'FRQ', 'NORTH', 'SOUTH', 'EAST', 'WEST',
                 'NEG', 'AFFIRM', '09', '27', '123.9']
@@ -47,11 +40,11 @@ class DepAircraft:
         for i in cmd:
             if i in self.keywords or i in self.taxiways:
                 inst.append(i)
-        transition = self.trans_dict[inst[0]]
+        transition = inst[0].lower()
         taxiway = inst[1]
         print(inst)
         print(transition)
-        DepAircraft.trigger('pushback')
+        self.trigger(transition)
         print(self.state)
         print(taxiway)
         print(inst.index(taxiway))
