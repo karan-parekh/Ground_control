@@ -1,5 +1,6 @@
 from pygame_functions import *
-from gc_functions import *
+# from gc_functions import *
+from gc_fsm import *
 import pygame
 
 pixels = 512

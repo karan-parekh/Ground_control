@@ -3,7 +3,7 @@ sprites = {
     "B747": "B747.png"
 }
 
-taxiway_color = "red"
+taxiway_color = "black"
 taxiway_width = 2
 runway_width = 8
 # TODO: yet to add offsets
@@ -44,7 +44,7 @@ def get_next_pos(instruction, last_pos):
     for keyword in keywords:
         if keyword in instruction:
             words.append(keyword)
-    # nxt = []
+    nxt = []
     for word in words:
         nxt = airport1[word][:4]
     nxt = [(nxt[0], nxt[1]), (nxt[2], nxt[3])]

@@ -59,8 +59,7 @@ class DepAircraft:
         self.last_position(x, y)
 
     def turn_craft(self, deg):
-        diff = abs(self.angle - deg)  # if self.angle > deg else deg - self.angle  # gets the difference between angles
-        transformSprite(self.craft, diff, self.scale)
+        transformSprite(self.craft, deg, self.scale)
         self.angle = deg
 
     def move_craft(self, last_pos, next_pos):
