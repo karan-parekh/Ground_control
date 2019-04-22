@@ -37,8 +37,12 @@ manual = {
 #                      (airport1[last_pos][2], airport1[last_pos][3]))
 #     }
 
+def get_coordinates(taxiway):
+    co = airport1[taxiway][:4]
 
-def get_next_pos(instruction, last_pos):
+    pass
+
+def get_next_pos(instruction):
     instruction = instruction.upper().split(' ')
     words = []
     for keyword in keywords:

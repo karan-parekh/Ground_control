@@ -28,19 +28,24 @@ def place_command_box():
 
 
 class DepAircraft:
+    txw = ''
+    facing = ''
 
     def readback(self):
         print("Reading back")
         pass
 
-    def pushback_(self, txw, facing):
-        last_pos = self.move_craft(self.gate_no, txw)
-        if facing == 'WEST':
-            print("Facing WEST")
-            # self.turn_craft(270)
-        elif facing == 'EAST':
-            print("Facing EAST")
-            # self.turn_craft(90)
+    def pushback_(self):
+        next_pos = get_next_pos(self.txw)
+        last_pos = get_next_pos(self.gate_no)
+        finish = self.move_craft(last_pos, next_pos)
+        if finish:
+            if self.facing == 'WEST':
+                print("Facing WEST")
+                # self.turn_craft(270)
+            elif self.facing == 'EAST':
+                print("Facing EAST")
+                # self.turn_craft(90)
 
     def taxi_(self, taxiways):
         for t in taxiways:
@@ -66,8 +71,8 @@ class DepAircraft:
     states = [dark, pushback, taxi, hold_short, hold_position, take_off]
 
     transitions = [
-        ['pb', dark, pushback, ],
-        ['txi', pushback, taxi],
+        ['pb', [dark, hold_position], pushback, ],
+        ['txi', [pushback, hold_position], taxi],
         ['hs', taxi, hold_short],
         ['tkf', hold_short, take_off],
         ['hp', '*', hold_position]
@@ -76,7 +81,7 @@ class DepAircraft:
     def __init__(self, callsign, model, gate_no):
         self.callsign = callsign
         self.machine = Machine(model=self, states=DepAircraft.states, transitions=DepAircraft.transitions,
-                               initial=DepAircraft.dark, before_state_change='readback')
+                               initial=DepAircraft.dark, after_state_change='readback')
         self.gate_no = gate_no.upper()
         self.model = model.upper()
         self.craft = None
@@ -108,13 +113,12 @@ class DepAircraft:
             if i in self.keywords or i in self.taxiways:
                 command.append(i)
         trigger = command[0].lower()
-        taxiway = command[1]
+        self.txw = command[1]
         print(command)
         print(trigger)
         self.trigger(trigger)
         print(self.state)
-        print(taxiway)
-        print(command.index(taxiway))
+        print(self.txw)
 
     def turn_craft(self, deg):
         transformSprite(self.craft, deg, self.scale)
