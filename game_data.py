@@ -37,25 +37,18 @@ manual = {
 #                      (airport1[last_pos][2], airport1[last_pos][3]))
 #     }
 
+
 def get_coordinates(taxiway):
     co = airport1[taxiway][:4]
+    co = [(co[0], co[1]), (co[2], co[3])]
+    return co
 
-    pass
 
-def get_next_pos(instruction):
-    instruction = instruction.upper().split(' ')
-    words = []
-    for keyword in keywords:
-        if keyword in instruction:
-            words.append(keyword)
-    nxt = []
-    for word in words:
-        nxt = airport1[word][:4]
-    nxt = [(nxt[0], nxt[1]), (nxt[2], nxt[3])]
-    last_pos = airport1["G1"][:4]
-    last_pos = [(last_pos[0], last_pos[1]), (last_pos[2], last_pos[3])]
-    line1 = get_constants(nxt[0], nxt[1])
-    line2 = get_constants(last_pos[0], last_pos[1])
+def get_next_pos(txw1, txw2):
+    txw1 = get_coordinates(txw1)
+    txw2 = get_coordinates(txw2)
+    line1 = get_constants(txw2[0], txw2[1])
+    line2 = get_constants(txw1[0], txw1[1])
     return get_intersection_point(line1, line2)
 
 
@@ -78,8 +71,18 @@ def get_intersection_point(l1, l2):
         print("Lines do not intersect")
         return False
 
-#
+#  TESTS
+
 # inst = "pushback on a face w"
 # lp = (200, 400)
 # np = get_next_pos(inst, lp)
 # print(np)
+#
+#
+# if __name__ == '__main__':
+#     nxt = get_coordinates('A')
+#     last_pos = get_coordinates('M')
+#     line1 = get_constants(nxt[0], nxt[1])
+#     line2 = get_constants(last_pos[0], last_pos[1])
+#     x = get_intersection_point(line1, line2)
+#     print(x)
