@@ -65,11 +65,16 @@ class DepAircraft:
         else:
             self.txw.extend(self.inst[via:])
         if 'RNW' in self.inst:
+            # self.rnw = self.inst.split('RNW')[1].replace(' ', '')
             self.rnw = self.inst[self.inst.index('RNW') + 1]
+            self.txw.append(self.rnw)
+        last_pos = (self.x, self.y)
         for t in range(len(self.txw)-1):
-            finish = self.move_craft(self.txw[t], self.txw[t+1])
-            if finish:
-                self.turn_craft(math.degrees(math.atan(self.slope)))  # inverse tangent of slope in degrees
+            next_pos = get_next_pos(self.txw[t], self.txw[t+1])
+            finish = self.move_craft(last_pos, next_pos)
+            # if finish:
+            self.turn_craft(math.degrees(math.atan(self.slope)))  # inverse tangent of slope in degrees
+            last_pos = next_pos
 
     def hold_short_(self):
         pass
@@ -145,6 +150,8 @@ class DepAircraft:
 
     def move_craft(self, last_pos, next_pos):
         # x, y = 0, 0
+        last_pos = int(last_pos[0]), int(last_pos[1])
+        next_pos = int(next_pos[0]), int(next_pos[1])
         if last_pos[0] == next_pos[0]:  # for vertical line
             direction = 1 if next_pos[1] > last_pos[1] else -1
             for y in range(int(last_pos[1]), int(next_pos[1]) - 1, direction):
@@ -177,6 +184,7 @@ class DepAircraft:
                 draw_airport(airport1)
                 pause(25)
             finish = True if (x, y) == last_pos else False
+        self.x, self.y = x, y
         return finish
 
 #

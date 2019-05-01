@@ -10,7 +10,8 @@ runway_width = 8
 oy = 0  # oy is to set offset vertically. set -ve to move up and +ve to move down
 ox = 0  # ox is to set offset horizontally. set -ve to move left and +ve to move right
 airport1 = {
-    "0927": (50, 140, 450, 140, taxiway_color, runway_width),
+    "09": (50, 140, 450, 140, taxiway_color, runway_width),
+    "27": (50, 140, 450, 140, taxiway_color, runway_width),
     "A": (100, 350, 400, 350, taxiway_color, taxiway_width),
     "M": (100, 350, 100, 250, taxiway_color, taxiway_width),
     "N": (400, 350, 400, 250, taxiway_color, taxiway_width),
