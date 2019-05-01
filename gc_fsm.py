@@ -65,15 +65,14 @@ class DepAircraft:
         else:
             self.txw.extend(self.inst[via:])
         if 'RNW' in self.inst:
-            # self.rnw = self.inst.split('RNW')[1].replace(' ', '')
             self.rnw = self.inst[self.inst.index('RNW') + 1]
             self.txw.append(self.rnw)
         last_pos = (self.x, self.y)
         for t in range(len(self.txw)-1):
             next_pos = get_next_pos(self.txw[t], self.txw[t+1])
-            finish = self.move_craft(last_pos, next_pos)
-            # if finish:
-            self.turn_craft(math.degrees(math.atan(self.slope)))  # inverse tangent of slope in degrees
+            self.move_craft(last_pos, next_pos)
+            print(self.angle)
+            self.turn_craft(self.angle)  # inverse tangent of slope in degrees
             last_pos = next_pos
 
     def hold_short_(self):
@@ -131,18 +130,13 @@ class DepAircraft:
     
     def evaluate_instructions(self, inst):
         inst = inst.upper().split(' ')
-        print(self.state)
         command = []
         for i in inst:
             if i in self.keywords or i in self.taxiways:
                 command.append(i)
         self.inst = command
         trigger = command[0].lower()
-        print(command)
-        print(trigger)
         self.trigger(trigger)
-        print(self.state)
-        print(self.txw)
 
     def turn_craft(self, deg):
         transformSprite(self.craft, deg, self.scale)
@@ -154,27 +148,28 @@ class DepAircraft:
         next_pos = int(next_pos[0]), int(next_pos[1])
         if last_pos[0] == next_pos[0]:  # for vertical line
             direction = 1 if next_pos[1] > last_pos[1] else -1
+            self.angle = 270 if direction == 1 else 90
             for y in range(int(last_pos[1]), int(next_pos[1]) - 1, direction):
                 x = last_pos[0]  # equation of a vertical line
                 moveSprite(self.craft, x, y, True)
                 draw_airport(airport1)
                 pause(25)
             finish = True if (x, y) == next_pos else False
-            # self.angle = 180 if direction == 1 else 360
         elif last_pos[1] == next_pos[1]:  # for horizontal line
             direction = 1 if next_pos[0] > last_pos[0] else -1
+            self.angle = 180 if direction == 1 else 0
             for x in range(last_pos[0], next_pos[0] + 1, direction):
                 y = last_pos[1]  # equation of a horizontal line
                 moveSprite(self.craft, x, y, True)
                 draw_airport(airport1)
                 pause(25)
             finish = True if (x, y) == last_pos else False
-            # self.angle = 270 if direction == 1 else 90
         else:   # for inclined line
             af = [float(i) for i in last_pos]
             bf = [float(i) for i in next_pos]
             m = (bf[1] - af[1]) / (bf[0] - af[0])  # slope of line
-            self.slope = m
+            self.angle = math.degrees(math.atan(m)) - 90
+            self.turn_craft(self.angle)
             c = af[1] - m * af[0]  # constant
             direction = 1 if next_pos[0] > last_pos[0] else -1
             offset = 1 if m < 0 else -1
