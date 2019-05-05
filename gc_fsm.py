@@ -157,7 +157,8 @@ class DepAircraft:
             finish = True if (x, y) == next_pos else False
         elif last_pos[1] == next_pos[1]:  # for horizontal line
             direction = 1 if next_pos[0] > last_pos[0] else -1
-            self.angle = 180 if direction == 1 else 0
+            self.angle = 0
+            # self.angle = 180 if direction == 1 else 0
             for x in range(last_pos[0], next_pos[0] + 1, direction):
                 y = last_pos[1]  # equation of a horizontal line
                 moveSprite(self.craft, x, y, True)
@@ -168,10 +169,11 @@ class DepAircraft:
             af = [float(i) for i in last_pos]
             bf = [float(i) for i in next_pos]
             m = (bf[1] - af[1]) / (bf[0] - af[0])  # slope of line
-            self.angle = math.degrees(math.atan(m)) - 90
-            self.turn_craft(self.angle)
             c = af[1] - m * af[0]  # constant
             direction = 1 if next_pos[0] > last_pos[0] else -1
+            correction = 270 if direction == 1 else 90
+            self.angle = math.degrees(math.atan(m)) - correction
+            self.turn_craft(self.angle)
             offset = 1 if m < 0 else -1
             for x in range(last_pos[0], next_pos[0] + offset, direction):
                 y = m * x + c  # equation of a straight line
