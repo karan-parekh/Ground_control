@@ -8,17 +8,16 @@ import math
 def draw_airport(airport):
     for element in airport.values():
         drawLine(*element)
-        # drawLine(element[0], element[1], element[2], element[3], (255, 0, 0, 255), element[5])
-    # for taxiway in airport.keys():
-    #     label = makeLabel(taxiway, 30, 200, 200, "red")
-    #     showLabel(label)
 
 
 def request_command(wordbox):
     instruction = textBoxInput(wordbox)
-    readback = makeLabel(instruction, 25, 10, 420)
-    showLabel(readback)
-    return instruction
+    if instruction:
+        con_out = makeLabel(instruction, 25, 10, 420)
+        showLabel(con_out)
+        return instruction
+    else:
+        return False
 
 
 def place_command_box():
@@ -127,16 +126,22 @@ class DepAircraft:
     taxiways = ['A', 'M', 'N', 'W', 'X', 'Y', 'Z']
     keywords = ['PB', 'TXW', 'FCN', 'TXI', 'VIA', 'HS', 'RNW', 'HP', 'CNT', 'TWR', 'FRQ', 'NORTH', 'SOUTH', 'EAST', 'WEST',
                 'NEG', 'AFFIRM', '09', '27', '123.9']
-    
+
     def evaluate_instructions(self, inst):
-        inst = inst.upper().split(' ')
-        command = []
-        for i in inst:
-            if i in self.keywords or i in self.taxiways:
-                command.append(i)
-        self.inst = command
-        trigger = command[0].lower()
-        self.trigger(trigger)
+        if inst:
+            inst = inst.upper().split(' ')
+            command = []
+            for i in inst:
+                if i in self.keywords or i in self.taxiways:
+                    command.append(i)
+            self.inst = command
+            trigger = command[0].lower()
+            self.trigger(trigger)
+        else:
+            self.continue_game()
+
+    def continue_game(self):
+        pass
 
     def turn_craft(self, deg):
         transformSprite(self.craft, deg, self.scale)
