@@ -3,14 +3,15 @@ sprites = {
     "B747": "B747.png"
 }
 
-taxiway_color = "red"
+taxiway_color = "black"
 taxiway_width = 2
 runway_width = 8
 # TODO: yet to add offsets
 oy = 0  # oy is to set offset vertically. set -ve to move up and +ve to move down
 ox = 0  # ox is to set offset horizontally. set -ve to move left and +ve to move right
 airport1 = {
-    "0927": (50, 140, 450, 140, taxiway_color, runway_width),
+    "09": (50, 140, 450, 140, taxiway_color, runway_width),
+    "27": (450, 140, 50, 140, taxiway_color, runway_width),
     "A": (100, 350, 400, 350, taxiway_color, taxiway_width),
     "M": (100, 350, 100, 250, taxiway_color, taxiway_width),
     "N": (400, 350, 400, 250, taxiway_color, taxiway_width),
@@ -38,20 +39,17 @@ manual = {
 #     }
 
 
-def get_next_pos(instruction, last_pos):
-    instruction = instruction.upper().split(' ')
-    words = []
-    for keyword in keywords:
-        if keyword in instruction:
-            words.append(keyword)
-    # nxt = []
-    for word in words:
-        nxt = airport1[word][:4]
-    nxt = [(nxt[0], nxt[1]), (nxt[2], nxt[3])]
-    last_pos = airport1["G1"][:4]
-    last_pos = [(last_pos[0], last_pos[1]), (last_pos[2], last_pos[3])]
-    line1 = get_constants(nxt[0], nxt[1])
-    line2 = get_constants(last_pos[0], last_pos[1])
+def get_coordinates(taxiway):
+    co = airport1[taxiway][:4]
+    co = [(co[0], co[1]), (co[2], co[3])]
+    return co
+
+
+def get_next_pos(txw1, txw2):
+    txw1 = get_coordinates(txw1)
+    txw2 = get_coordinates(txw2)
+    line1 = get_constants(txw2[0], txw2[1])
+    line2 = get_constants(txw1[0], txw1[1])
     return get_intersection_point(line1, line2)
 
 
@@ -74,8 +72,18 @@ def get_intersection_point(l1, l2):
         print("Lines do not intersect")
         return False
 
-#
+#  TESTS
+
 # inst = "pushback on a face w"
 # lp = (200, 400)
 # np = get_next_pos(inst, lp)
 # print(np)
+#
+#
+# if __name__ == '__main__':
+#     nxt = get_coordinates('A')
+#     last_pos = get_coordinates('M')
+#     line1 = get_constants(nxt[0], nxt[1])
+#     line2 = get_constants(last_pos[0], last_pos[1])
+#     x = get_intersection_point(line1, line2)
+#     print(x)
