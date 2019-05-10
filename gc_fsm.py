@@ -2,6 +2,7 @@ from transitions import Machine
 from transitions import State
 from game_data import *
 from pygame_functions import *
+from threading import Thread
 import math
 
 
@@ -152,43 +153,63 @@ class DepAircraft:
         last_pos = int(last_pos[0]), int(last_pos[1])
         next_pos = int(next_pos[0]), int(next_pos[1])
         if last_pos[0] == next_pos[0]:  # for vertical line
-            direction = 1 if next_pos[1] > last_pos[1] else -1
-            self.angle = 270 if direction == 1 else 90
-            for y in range(int(last_pos[1]), int(next_pos[1]) - 1, direction):
-                x = last_pos[0]  # equation of a vertical line
-                moveSprite(self.craft, x, y, True)
-                draw_airport(airport1)
-                pause(25)
-            finish = True if (x, y) == next_pos else False
+            args = last_pos, next_pos
+            tv = Thread(target=self.vertical, args=args)
+            tv.start()
         elif last_pos[1] == next_pos[1]:  # for horizontal line
-            direction = 1 if next_pos[0] > last_pos[0] else -1
-            self.angle = 0
-            # self.angle = 180 if direction == 1 else 0
-            for x in range(last_pos[0], next_pos[0] + 1, direction):
-                y = last_pos[1]  # equation of a horizontal line
-                moveSprite(self.craft, x, y, True)
-                draw_airport(airport1)
-                pause(25)
-            finish = True if (x, y) == last_pos else False
+            args = last_pos, next_pos
+            th = Thread(target=self.horizontal, args=args)
+            th.start()
         else:   # for inclined line
-            af = [float(i) for i in last_pos]
-            bf = [float(i) for i in next_pos]
-            m = (bf[1] - af[1]) / (bf[0] - af[0])  # slope of line
-            c = af[1] - m * af[0]  # constant
-            direction = 1 if next_pos[0] > last_pos[0] else -1
-            correction = 270 if direction == 1 else 90
-            self.angle = math.degrees(math.atan(m)) - correction
-            self.turn_craft(self.angle)
-            offset = 1 if m < 0 else -1
-            for x in range(last_pos[0], next_pos[0] + offset, direction):
-                y = m * x + c  # equation of a straight line
-                moveSprite(self.craft, x, y, True)
-                draw_airport(airport1)
-                pause(25)
-            finish = True if (x, y) == last_pos else False
-        self.x, self.y = x, y
+            args = last_pos, next_pos
+            ti = Thread(target=self.vertical, args=args)
+            ti.start()
+        finish = True if (self.x, self.y) == last_pos else False
+        print(finish)
         return finish
 
+    def horizontal(self, *args):
+        last_pos, next_pos = args
+        direction = 1 if next_pos[0] > last_pos[0] else -1
+        self.angle = 0
+        # self.angle = 180 if direction == 1 else 0
+        for x in range(last_pos[0], next_pos[0] + 1, direction):
+            y = last_pos[1]  # equation of a horizontal line
+            moveSprite(self.craft, x, y, True)
+            draw_airport(airport1)
+            pause(25)
+        self.x, self.y = x, y
+        finish = True if (x, y) == last_pos else False
+
+    def vertical(self, *args):
+        last_pos, next_pos = args
+        direction = 1 if next_pos[1] > last_pos[1] else -1
+        self.angle = 270 if direction == 1 else 90
+        for y in range(int(last_pos[1]), int(next_pos[1]) - 1, direction):
+            x = last_pos[0]  # equation of a vertical line
+            moveSprite(self.craft, x, y, True)
+            draw_airport(airport1)
+            pause(25)
+        self.x, self.y = x, y
+        finish = True if (x, y) == next_pos else False
+
+    def inclined(self, *args):
+        last_pos, next_pos = args
+        af = [float(i) for i in last_pos]
+        bf = [float(i) for i in next_pos]
+        m = (bf[1] - af[1]) / (bf[0] - af[0])  # slope of line
+        c = af[1] - m * af[0]  # constant
+        direction = 1 if next_pos[0] > last_pos[0] else -1
+        correction = 270 if direction == 1 else 90
+        self.angle = math.degrees(math.atan(m)) - correction
+        self.turn_craft(self.angle)
+        offset = 1 if m < 0 else -1
+        for x in range(last_pos[0], next_pos[0] + offset, direction):
+            y = m * x + c  # equation of a straight line
+            moveSprite(self.craft, x, y, True)
+            draw_airport(airport1)
+            pause(25)
+        self.x, self.y = x, y
 #
 # def main():
 #     # draw_airport(airport1)
