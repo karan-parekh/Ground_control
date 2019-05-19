@@ -82,7 +82,12 @@ class DepAircraft:
         pass
 
     def take_off_(self):
-        pass
+        deg = int(self.rnw) * 10
+        self.turn_craft(deg)
+        runway = get_coordinates(self.rnw)
+        last_pos = (runway[0][0], runway[0][1])
+        next_pos = (runway[1][0], runway[1][1])
+        self.move_craft(last_pos, next_pos)
 
     dark = State('dark')
     pushback = State('pushback', on_enter=['pushback_'])
@@ -97,7 +102,7 @@ class DepAircraft:
         ['pb', [dark, hold_position], pushback, ],
         ['txi', [pushback, hold_position], taxi],
         ['hs', taxi, hold_short],
-        ['tkf', hold_short, take_off],
+        ['clrd', [taxi, hold_short], take_off],
         ['hp', '*', hold_position]
     ]
 
@@ -126,7 +131,7 @@ class DepAircraft:
 
     taxiways = ['A', 'M', 'N', 'W', 'X', 'Y', 'Z']
     keywords = ['PB', 'TXW', 'FCN', 'TXI', 'VIA', 'HS', 'RNW', 'HP', 'CNT', 'TWR', 'FRQ', 'NORTH', 'SOUTH', 'EAST', 'WEST',
-                'NEG', 'AFFIRM', '09', '27', '123.9']
+                'NEG', 'AFFIRM', '09', '27', '123.9', 'CLRD']
     
     def evaluate_instructions(self, inst):
         inst = inst.upper().split(' ')
