@@ -6,18 +6,8 @@ from threading import Thread
 import math
 
 
-def draw_airport(airport):
-    # for element in airport.values():
-    #     element = element[:6]
-    #     drawLine(*element)
-    # for line in airport.items():
-    #     label = makeLabel(line[0], 30, xpos=line[1][-2], ypos=line[1][-1], fontColour='red')
-    #     showLabel(label)
-    for element in airport.items():
-        line = element[1][:6]
-        label = makeLabel(element[0], 30, xpos=element[1][-2], ypos=element[1][-1], fontColour='red')
-        drawLine(*line)
-        showLabel(label)
+def draw_airport():
+    setBackgroundImage("airport1.png")
 
 
 # old_label = makeLabel("", 25, 10, 420)
@@ -96,9 +86,9 @@ class DepAircraft:
         self.turn_craft(deg)
         runway = get_coordinates(self.rnw)
         last_pos = (runway[0][0], runway[0][1])
-        unit = 1 if "09" in self.inst else -1
-        next_pos = (runway[1][0] + 100 * unit, runway[1][1])
-        self.move_craft(last_pos, next_pos, delay=10)
+        unit = -1 if "09" in self.inst else 1
+        next_pos = (runway[1][0] + (100 * unit), runway[1][1])
+        self.move_craft(last_pos, next_pos, delay=5)
 
     dark = State('dark')
     pushback = State('pushback', on_enter=['pushback_'])
@@ -181,7 +171,7 @@ class DepAircraft:
             for y in range(int(last_pos[1]), int(next_pos[1]) - 1, direction):
                 x = last_pos[0]  # equation of a vertical line
                 moveSprite(self.craft, x, y, True)
-                draw_airport(airport1)
+                draw_airport()
                 pause(delay)
             finish = True if (x, y) == next_pos else False
         elif last_pos[1] == next_pos[1]:  # for horizontal line
@@ -191,7 +181,7 @@ class DepAircraft:
             for x in range(last_pos[0], next_pos[0] + 1, direction):
                 y = last_pos[1]  # equation of a horizontal line
                 moveSprite(self.craft, x, y, True)
-                draw_airport(airport1)
+                draw_airport()
                 pause(delay)
             finish = True if (x, y) == last_pos else False
         else:   # for inclined line
@@ -207,8 +197,8 @@ class DepAircraft:
             for x in range(last_pos[0], next_pos[0] + offset, direction):
                 y = m * x + c  # equation of a straight line
                 moveSprite(self.craft, x, y, True)
-                draw_airport(airport1)
-                pause(delay)
+                draw_airport()
+                pause(30)
             finish = True if (x, y) == last_pos else False
         self.x, self.y = x, y
         return finish
