@@ -2,22 +2,23 @@ from transitions import Machine
 from transitions import State
 from game_data import *
 from pygame_functions import *
+from threading import Thread
 import math
 
 
 def draw_airport(airport):
     for element in airport.values():
+        element = element[:6]
         drawLine(*element)
-        # drawLine(element[0], element[1], element[2], element[3], (255, 0, 0, 255), element[5])
-    # for taxiway in airport.keys():
-    #     label = makeLabel(taxiway, 30, 200, 200, "red")
-    #     showLabel(label)
+    for taxiway in airport.items():
+        label = makeLabel(taxiway[0], 30, xpos=taxiway[1][-2], ypos=taxiway[1][-1], fontColour='red')
+        showLabel(label)
 
 
-old_label = makeLabel("", 25, 10, 420)
+# old_label = makeLabel("", 25, 10, 420)
 
 def request_command(wordbox):
-    hideLabel(old_label)
+    # hideLabel(old_label)
     instruction = textBoxInput(wordbox)
     new_label = makeLabel(instruction, 25, 10, 420)
     showLabel(new_label)
@@ -166,6 +167,7 @@ class DepAircraft:
 
     def move_craft(self, last_pos, next_pos, delay=25):
         # x, y = 0, 0
+        t = Thread(target=draw_airport, args=airport1)
         last_pos = int(last_pos[0]), int(last_pos[1])
         next_pos = int(next_pos[0]), int(next_pos[1])
         if last_pos[0] == next_pos[0]:  # for vertical line
@@ -174,7 +176,7 @@ class DepAircraft:
             for y in range(int(last_pos[1]), int(next_pos[1]) - 1, direction):
                 x = last_pos[0]  # equation of a vertical line
                 moveSprite(self.craft, x, y, True)
-                draw_airport(airport1)
+                # draw_airport(airport1)
                 pause(delay)
             finish = True if (x, y) == next_pos else False
         elif last_pos[1] == next_pos[1]:  # for horizontal line

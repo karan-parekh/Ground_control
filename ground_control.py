@@ -2,6 +2,7 @@ from pygame_functions import *
 # from gc_functions import *
 from gc_fsm import *
 import pygame
+from threading import Thread
 
 pixels = 512
 screenSize(pixels, pixels)
@@ -18,6 +19,7 @@ def main():
         instructions = request_command(wordbox)
         AI123.evaluate_instructions(instructions)
         draw_airport(airport1)
+        # t.start()
         tick(30)
 
 

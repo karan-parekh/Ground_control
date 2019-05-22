@@ -10,17 +10,17 @@ runway_width = 8
 oy = 0  # oy is to set offset vertically. set -ve to move up and +ve to move down
 ox = 0  # ox is to set offset horizontally. set -ve to move left and +ve to move right
 airport1 = {
-    "09": (50, 140, 450, 140, taxiway_color, runway_width),
-    "27": (450, 140, 50, 140, taxiway_color, runway_width),
-    "A": (100, 350, 400, 350, taxiway_color, taxiway_width),
-    "M": (100, 350, 100, 250, taxiway_color, taxiway_width),
-    "N": (400, 350, 400, 250, taxiway_color, taxiway_width),
-    "W": (50, 140, 100, 250, taxiway_color, taxiway_width),
-    "X": (100, 250, 200, 140, taxiway_color, taxiway_width),
-    "Y": (400, 250, 300, 140, taxiway_color, taxiway_width),
-    "Z": (400, 250, 450, 140, taxiway_color, taxiway_width),
-    "G1": (200, 400, 200, 350, taxiway_color, taxiway_width),
-    "G2": (300, 400, 300, 350, taxiway_color, taxiway_width),
+    "09": (50, 140, 450, 140, taxiway_color, runway_width, 30, 150),
+    "27": (450, 140, 50, 140, taxiway_color, runway_width, 480, 150),
+    "A": (100, 350, 400, 350, taxiway_color, taxiway_width, 250, 330),
+    "M": (100, 350, 100, 250, taxiway_color, taxiway_width, 80, 300),
+    "N": (400, 350, 400, 250, taxiway_color, taxiway_width, 420, 300),
+    "W": (50, 140, 100, 250, taxiway_color, taxiway_width, 50, 200),
+    "X": (100, 250, 200, 140, taxiway_color, taxiway_width, 180, 200),
+    "Y": (400, 250, 300, 140, taxiway_color, taxiway_width, 330, 200),
+    "Z": (400, 250, 450, 140, taxiway_color, taxiway_width, 450, 200),
+    "G1": (200, 400, 200, 350, taxiway_color, taxiway_width, 200, 430),
+    "G2": (300, 400, 300, 350, taxiway_color, taxiway_width, 300, 430),
 }
 
 ramp = [k for k in airport1.keys()]
