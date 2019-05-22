@@ -7,11 +7,16 @@ import math
 
 
 def draw_airport(airport):
-    for element in airport.values():
-        element = element[:6]
-        drawLine(*element)
-    for taxiway in airport.items():
-        label = makeLabel(taxiway[0], 30, xpos=taxiway[1][-2], ypos=taxiway[1][-1], fontColour='red')
+    # for element in airport.values():
+    #     element = element[:6]
+    #     drawLine(*element)
+    # for line in airport.items():
+    #     label = makeLabel(line[0], 30, xpos=line[1][-2], ypos=line[1][-1], fontColour='red')
+    #     showLabel(label)
+    for element in airport.items():
+        line = element[1][:6]
+        label = makeLabel(element[0], 30, xpos=element[1][-2], ypos=element[1][-1], fontColour='red')
+        drawLine(*line)
         showLabel(label)
 
 
@@ -176,7 +181,7 @@ class DepAircraft:
             for y in range(int(last_pos[1]), int(next_pos[1]) - 1, direction):
                 x = last_pos[0]  # equation of a vertical line
                 moveSprite(self.craft, x, y, True)
-                # draw_airport(airport1)
+                draw_airport(airport1)
                 pause(delay)
             finish = True if (x, y) == next_pos else False
         elif last_pos[1] == next_pos[1]:  # for horizontal line
